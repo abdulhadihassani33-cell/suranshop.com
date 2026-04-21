@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم المدير</title>
+  <style>
+      body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+      header { text-align: center; padding: 20px; background: #222; color: white; border-radius: 10px; }
+      .admin-box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); width: 400px; margin: 40px auto; text-align: center; }
+      .admin-box h2 { margin-bottom: 20px; color: #333; }
+      label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
+      input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+      .btn { margin-top: 15px; width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+      .btn:hover { background: #0056b3; }
+      .dashboard { display: none; margin-top: 30px; text-align: center; }
+      .dashboard h3 { margin-bottom: 20px; }
+      .product-actions { margin-top: 20px; }
+      .product-actions button { margin: 5px; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; color: white; }
+      .add-btn { background: #28a745; }
+      .delete-btn { background: red; }
+      .edit-btn { background: #ff9800; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>لوحة تحكم المدير</h1>
+</header>
+
+<div class="admin-box" id="loginBox">
+  <h2>تسجيل دخول المدير</h2>
+  <label>كلمة المرور:</label>
+  <input type="password" id="adminPass">
+  <button class="btn" onclick="adminLogin()">دخول</button>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <h3>مرحبًا بك أيها المدير</h3>
+  <form onsubmit="addProduct(event)">
+    <label>اسم المنتج:</label>
+    <input type="text" id="productName" required>
+    <label>رابط الصورة:</label>
+    <input type="text" id="productImage" required>
+    <label>السعر:</label>
+    <input type="number" id="productPrice" required>
+    <button class="btn" type="submit">➕ إضافة منتج</button>
+  </form>
+
+  <div class="product-actions">
+    <button class="delete-btn" onclick="deleteProduct()">🗑️ حذف منتج</button>
+    <button class="edit-btn" onclick="editProduct()">✏️ تعديل منتج</button>
+  </div>
+</div>
+
+<script>
+function adminLogin() {
+  let pass = document.getElementById("adminPass").value;
+  if(pass === "HadiAdminMNL") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+  } else {
+    alert("كلمة المرور غير صحيحة");
+  }
+}
+
+function addProduct(event) {
+  event.preventDefault();
+  let name = document.getElementById("productName").value;
+  let image = document.getElementById("productImage").value;
+  let price = document.getElementById("productPrice").value;
+
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  products.push({name, image, price});
+  localStorage.setItem("products", JSON.stringify(products));
+
+  alert("تمت إضافة المنتج بنجاح!");
+  document.getElementById("productName").value = "";
+  document.getElementById("productImage").value = "";
+  document.getElementById("productPrice").value = "";
+}
+
+function deleteProduct() {
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  if(products.length === 0) {
+    alert("لا يوجد منتجات لحذفها");
+    return;
+  }
+  let name = prompt("أدخل اسم المنتج المراد حذفه:");
+  let updated = products.filter(p => p.name !== name);
+  localStorage.setItem("products", JSON.stringify(updated));
+  alert("تم حذف المنتج إذا كان موجود");
+}
+
+function editProduct() {
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  if(products.length === 0) {
+    alert("لا يوجد منتجات لتعديلها");
+    return;
+  }
+  let name = prompt("أدخل اسم المنتج المراد تعديله:");
+  let product = products.find(p => p.name === name);
+  if(product) {
+    let newName = prompt("اسم جديد:", product.name);
+    let newImage = prompt("رابط صورة جديد:", product.image);
+    let newPrice = prompt("سعر جديد:", product.price);
+    product.name = newName;
+    product.image = newImage;
+    product.price = newPrice;
+    localStorage.setItem("products", JSON.stringify(products));
+    alert("تم تعديل المنتج بنجاح");
+  } else {
+    alert("المنتج غير موجود");
+  }
+}
+</script>
+
+</body>
+</html>

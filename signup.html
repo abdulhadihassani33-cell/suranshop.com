@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء حساب جديد</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f5f5f5;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            width: 300px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+        }
+
+        .btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back {
+            background: #444;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <h2>إنشاء حساب جديد</h2>
+
+        <input type="text" id="newUser" placeholder="اسم المستخدم">
+        <input type="password" id="newPass" placeholder="كلمة المرور">
+
+        <button class="btn" onclick="createAccount()">إنشاء الحساب</button>
+
+        <a href="login.html" class="btn back">العودة لتسجيل الدخول</a>
+    </div>
+
+    <script>
+        function createAccount() {
+            let user = document.getElementById("newUser").value;
+            let pass = document.getElementById("newPass").value;
+
+            if (user === "" || pass === "") {
+                alert("الرجاء إدخال جميع الحقول");
+                return;
+            }
+
+            // حفظ بيانات الحساب
+            localStorage.setItem("savedUser", user);
+            localStorage.setItem("savedPass", pass);
+
+            alert("تم إنشاء الحساب بنجاح");
+
+            // الانتقال لصفحة تسجيل الدخول
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سلة المشتريات</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            background: #222;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        #cart-items {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .back {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        #total {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>سلة المشتريات</h1>
+
+    <ul id="cart-items"></ul>
+
+    <div id="total">الإجمالي: 0$</div>
+
+    <button class="clear-btn" onclick="clearCart()">حذف كامل السلة</button>
+
+    <a class="back" href="index.html">العودة للمتجر</a>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const list = document.getElementById("cart-items");
+        const totalBox = document.getElementById("total");
+
+        function renderCart() {
+            list.innerHTML = "";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const li = document.createElement("li");
+
+                li.innerHTML = `
+                    ${item.name} - ${item.price}$
+                    <button class="delete-btn" onclick="deleteItem(${index})">حذف</button>
+                `;
+
+                list.appendChild(li);
+
+                total += item.price;
+            });
+
+            totalBox.textContent = "الإجمالي: " + total + "$";
+        }
+
+        function deleteItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+
+</body>
+</html>
+
+

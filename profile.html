@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ملفي الشخصي</title>
+  <style>
+      body {
+          font-family: sans-serif;
+          background: #f9f9f9;
+          margin: 0;
+          padding: 20px;
+      }
+
+      header {
+          text-align: center;
+          padding: 20px;
+          background: #222;
+          color: white;
+          border-radius: 10px;
+      }
+
+      .profile {
+          max-width: 400px;
+          margin: 30px auto;
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px #ccc;
+      }
+
+      .profile h2 {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+
+      .profile label {
+          display: block;
+          margin-top: 10px;
+      }
+
+      .profile input, .profile select {
+          width: 100%;
+          padding: 8px;
+          margin-top: 5px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+      }
+
+      .btn {
+          margin-top: 15px;
+          display: inline-block;
+          padding: 10px 15px;
+          background: #007bff;
+          color: white;
+          border-radius: 5px;
+          text-decoration: none;
+          cursor: pointer;
+      }
+
+      .logout-btn {
+          background: red;
+      }
+  </style>
+</head>
+<body>
+
+<header>
+    <h1>ملفي الشخصي</h1>
+</header>
+
+<div class="profile">
+    <h2>بيانات المستخدم</h2>
+    <label>الاسم الأول:</label>
+    <input type="text" id="firstName">
+
+    <label>الاسم الثاني:</label>
+    <input type="text" id="lastName">
+
+    <label>البريد الإلكتروني:</label>
+    <input type="email" id="email">
+
+    <label>رقم الجوال:</label>
+    <input type="text" id="phone">
+
+    <label>العمر:</label>
+    <input type="number" id="age">
+
+    <label>تاريخ الميلاد:</label>
+    <input type="date" id="birthDate">
+
+    <label>كلمة السر:</label>
+    <input type="password" id="password">
+
+    <label>اللغة المفضلة:</label>
+    <select id="language">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+    </select>
+
+    <button class="btn" onclick="saveProfile()">حفظ التعديلات</button>
+    <button class="btn logout-btn" onclick="logout()">تسجيل الخروج</button>
+</div>
+
+
+<script>
+// تحميل البيانات من LocalStorage
+window.onload = function() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(!currentUser) {
+        alert("الرجاء تسجيل الدخول أولاً");
+        window.location.href = "login.html";
+        return;
+    }
+
+    document.getElementById("firstName").value = currentUser.firstName || "";
+    document.getElementById("lastName").value = currentUser.lastName || "";
+    document.getElementById("email").value = currentUser.email || "";
+    document.getElementById("phone").value = currentUser.phone || "";
+    document.getElementById("age").value = currentUser.age || "";
+    document.getElementById("birthDate").value = currentUser.birthDate || "";
+    document.getElementById("password").value = currentUser.password || "";
+    document.getElementById("language").value = currentUser.language || "ar";
+};
+
+function saveProfile() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(!currentUser) return;
+
+    currentUser.firstName = document.getElementById("firstName").value;
+    currentUser.lastName = document.getElementById("lastName").value;
+    currentUser.email = document.getElementById("email").value;
+    currentUser.phone = document.getElementById("phone").value;
+    currentUser.age = document.getElementById("age").value;
+    currentUser.birthDate = document.getElementById("birthDate").value;
+    currentUser.password = document.getElementById("password").value;
+    currentUser.language = document.getElementById("language").value;
+
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    localStorage.setItem("userProfile", JSON.stringify(currentUser));
+
+    alert("تم حفظ التعديلات بنجاح");
+}
+
+function logout() {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("userProfile");
+    alert("تم تسجيل الخروج");
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>
